@@ -67,10 +67,10 @@ exports.createServicio = (req, res) => {
 
 
 exports.updateServicio = (req, res) => {
-  const { tipo_servicio, descripcion_servicio, costo, id_personal, id_cliente, estado } = req.body;
+  const {  estado } = req.body;
   const { id_servicio } = req.params;
-  pool.query('UPDATE servicio SET tipo_servicio = ?, descripcion_servicio = ?, costo = ?, id_personal = ?, id_cliente = ?, estado = ? WHERE id_servicio = ?', 
-    [tipo_servicio, descripcion_servicio, costo, id_personal, id_cliente, estado, id_servicio], (error, results) => {
+  pool.query('UPDATE servicio SET  estado = ? WHERE id_servicio = ?', 
+    [ estado, id_servicio], (error, results) => {
       if (error) {
         res.status(500).json({ error: 'Error al actualizar el servicio', mysqlError: error.message });
       } else if (results.affectedRows === 0) {
