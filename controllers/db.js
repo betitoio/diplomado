@@ -7,6 +7,10 @@ const pool = mysql.createPool({
   password: process.env.MYSQLPASSWORD || 'lKGvWnMMvGRCxOUTtvcZLJJkavorvNNq',
   database: process.env.MYSQLDATABASE || 'railway',
   port: process.env.MYSQLPORT || 46800
+  /*host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'gosth'*/
 });
 
 pool.getConnection((err, connection) => {

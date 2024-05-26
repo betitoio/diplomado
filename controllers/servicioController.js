@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+
 const pool = require('./db');
 
 /*const pool = mysql.createPool({
@@ -12,20 +12,22 @@ const pool = require('./db');
 exports.getAllServicios = (req, res) => {
   const query = `
   SELECT 
-  servicio.id_servicio,
-  servicio.tipo_servicio,
-  servicio.descripcion_servicio,
-  servicio.costo,
-  servicio.id_personal,
-  servicio.id_cliente,
-  servicio.estado,
-  cliente.Nombre AS nombre_cliente,
-  personal.nombre AS nombre_personal,
-  token_seguimiento.token
-FROM servicio
-LEFT JOIN cliente ON servicio.id_cliente = cliente.id_cliente
-LEFT JOIN personal ON servicio.id_personal = personal.id_personal
-LEFT JOIN token_seguimiento ON servicio.id_cliente = token_seguimiento.id_cliente 
+    servicio.id_servicio,
+    servicio.tipo_servicio,
+    servicio.descripcion_servicio,
+    servicio.costo,
+    servicio.id_personal,
+    servicio.id_cliente,
+    servicio.estado,
+    cliente.Nombre AS nombre_cliente,
+    personal.nombre AS nombre_personal,
+    token_seguimiento.token
+  FROM servicio
+  LEFT JOIN cliente ON servicio.id_cliente = cliente.id_cliente
+  LEFT JOIN personal ON servicio.id_personal = personal.id_personal
+  LEFT JOIN (
+    SELECT DISTINCT id_cliente, id_personal, token FROM token_seguimiento
+  ) AS token_seguimiento ON servicio.id_cliente = token_seguimiento.id_cliente 
     AND servicio.id_personal = token_seguimiento.id_personal
   `;
   
@@ -37,8 +39,6 @@ LEFT JOIN token_seguimiento ON servicio.id_cliente = token_seguimiento.id_client
     }
   });
 };
-
-
 exports.getServicioById = (req, res) => {
   const { id_servicio } = req.params;
   pool.query('SELECT * FROM servicio WHERE id_servicio = ?', [id_servicio], (error, results) => {

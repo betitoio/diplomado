@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+
 const pool = require('./db');
 
 /*const pool = mysql.createPool({
@@ -11,7 +11,7 @@ const pool = require('./db');
 
 */
 exports.getAllTokens = (req, res) => {
-  pool.query('SELECT * FROM Token_Seguimiento', (error, results) => {
+  pool.query('SELECT * FROM token_seguimiento', (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error al obtener los tokens de seguimiento', mysqlError: error.message });
     } else {
@@ -23,7 +23,7 @@ exports.getAllTokens = (req, res) => {
 
 exports.getTokenById = (req, res) => {
   const { id_token } = req.params;
-  pool.query('SELECT * FROM Token_Seguimiento WHERE id_token = ?', [id_token], (error, results) => {
+  pool.query('SELECT * FROM token_seguimiento WHERE id_token = ?', [id_token], (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error al obtener el token de seguimiento', mysqlError: error.message });
     } else if (results.length === 0) {
@@ -37,7 +37,7 @@ exports.getTokenById = (req, res) => {
 
 exports.createToken = (req, res) => {
   const { id_cliente, id_personal, token } = req.body;
-  pool.query('INSERT INTO Token_Seguimiento (id_cliente, id_personal, token) VALUES (?, ?, ?)', [id_cliente, id_personal, token], (error, results) => {
+  pool.query('INSERT INTO token_seguimiento (id_cliente, id_personal, token) VALUES (?, ?, ?)', [id_cliente, id_personal, token], (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error al crear el token de seguimiento', mysqlError: error.message });
     } else {
@@ -50,7 +50,7 @@ exports.createToken = (req, res) => {
 exports.updateToken = (req, res) => {
   const { id_cliente, id_personal, token } = req.body;
   const { id_token } = req.params;
-  pool.query('UPDATE Token_Seguimiento SET id_cliente = ?, id_personal = ?, token = ? WHERE id_token = ?', [id_cliente, id_personal, token, id_token], (error, results) => {
+  pool.query('UPDATE token_seguimiento SET id_cliente = ?, id_personal = ?, token = ? WHERE id_token = ?', [id_cliente, id_personal, token, id_token], (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error al actualizar el token de seguimiento', mysqlError: error.message });
     } else if (results.affectedRows === 0) {
@@ -64,7 +64,7 @@ exports.updateToken = (req, res) => {
 
 exports.deleteToken = (req, res) => {
   const { id_token } = req.params;
-  pool.query('DELETE FROM Token_Seguimiento WHERE id_token = ?', [id_token], (error, results) => {
+  pool.query('DELETE FROM token_seguimiento WHERE id_token = ?', [id_token], (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error al eliminar el token de seguimiento', mysqlError: error.message });
     } else if (results.affectedRows === 0) {
